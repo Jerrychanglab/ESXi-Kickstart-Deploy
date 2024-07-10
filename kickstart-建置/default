@@ -1,0 +1,40 @@
+#載入選項畫面
+default vesamenu.c32
+#確認
+prompt 0
+#等待時間60s
+timeout 600
+#選單開頭
+menu title ESXI PXE Install
+
+#menu separator
+label local
+      MENU LABEL ^Boot from local drive
+      localboot 0xffff
+
+#label ESXi_7.0U3n
+#      KERNEL images/ESXi_7.0U3n/mboot.c32
+#      APPEND images/ESXi_7.0U3n/boot.cfg
+#      MENU LABEL ^[ Dell - R640 ] Install ESXi 7.0U3n
+
+label ESXi_8.0U2_VM
+      KERNEL images/ESXi_8.0U2/mboot.c32
+      APPEND images/ESXi_8.0U2/boot.cfg
+      MENU LABEL ^[ VM ] Install ESXi 8.0U2
+
+label ESXi_8.0U2_SR630
+      KERNEL images/ESXi_8.0U2_SR630/mboot.c32
+      APPEND images/ESXi_8.0U2_SR630/boot.cfg
+      MENU LABEL ^[ Lenovo - SR630 ] Install ESXi 8.0U2
+
+label ESXi_8.0U2_R640
+      KERNEL images/ESXi_8.0U2_R640/mboot.c32
+      APPEND images/ESXi_8.0U2_R640/boot.cfg
+      MENU LABEL ^[ Dell - R640 ] Install ESXi 8.0U2
+
+label ESXi_8.0U2_GEN10
+      KERNEL images/ESXi_8.0U2_GEN10/mboot.c32
+      APPEND images/ESXi_8.0U2_GEN10/boot.cfg
+      MENU LABEL ^[ HP - GEN10 ] Install ESXi 8.0U2
+
+menu end
