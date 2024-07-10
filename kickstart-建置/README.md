@@ -4,8 +4,14 @@
 3. dhcpd
 ``` yum install httpd xinetd dhcpd```
 
-DHCP建置
+## DHCP建置
+### 安裝套件
+```yum install dhcpd```
+### 修改DHCP文件
+vim /etc/dhcp/dhcpd.conf
 
+### 配發IP紀錄
+```cat /var/lib/dhcpd/dhcpd.leases```
 建置結構
 /var/lib/tftpboot/images/
                         - ESXi_8.0U2_SR630
