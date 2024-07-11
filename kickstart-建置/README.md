@@ -110,7 +110,6 @@ updated=0
 vim /var/lib/tftpboot/pxelinux.cfg/default
 
 # 內容貼上
-
 default vesamenu.c32 # 載入選項畫面
 prompt 0 # 確認
 timeout 600 # 等待時間60s
