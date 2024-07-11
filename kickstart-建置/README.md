@@ -9,9 +9,33 @@
 ```yum install dhcpd```
 ### 修改DHCP文件
 vim /etc/dhcp/dhcpd.conf
+```
+subnet 10.31.34.0 netmask 255.255.255.0 {       
+range 10.31.34.11 10.31.34.250;   #配發網段範圍
 
+# Gateway Allotment
+option routers 10.31.34.254; 
+option broadcast-address 10.31.34.255;  
+
+# Lease Time
+default-lease-time 31536000;  #DHCP租戶確認週期
+max-lease-time 31536000;    #DHCP租戶保留週期
+
+# Ping檢查
+ping-check true;
+
+# 轉導到Kickstart Server
+filename "pxelinux.0";
+next-server 10.31.34.9;     #指定轉跳到PXE Server
+}
+```
+### 重啟服務
+```systemctl restart dhcpd```
 ### 配發IP紀錄
 ```cat /var/lib/dhcpd/dhcpd.leases```
+
+
+
 建置結構
 /var/lib/tftpboot/images/
                         - ESXi_8.0U2_SR630
