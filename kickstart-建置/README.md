@@ -1,4 +1,4 @@
-安裝套件
+![image](https://github.com/Jerrychanglab/ESXi-Kickstart-Deploy/assets/39659664/d31f729f-9ec0-4106-abc8-2cd30c62118d)安裝套件
 1. httpd
 2. xinetd
 3. dhcpd
@@ -35,9 +35,29 @@ next-server 10.31.34.9;     #指定轉跳到PXE Server
 ```cat /var/lib/dhcpd/dhcpd.leases```
 
 ## tftpboot結構-建置
-### 安裝xinetd
-```yum install xinetd```
-### Wget抓取
+### 安裝xinetd與tftp-server
+```yum install xinetd tftp-server```
+### 配置tftp
+```
+# 開啟創建文件
+vim /etc/xinetd.d/tftp
+
+# 內容貼上
+service tftp
+{
+	socket_type		= dgram
+	protocol		= udp
+	wait			= yes
+	user			= root
+	server		= /usr/sbin/in.tftpd
+	server_args		= -s /var/lib/tftpboot
+	disable		= no
+	per_source		= 11
+	cps			= 100 2
+	flags			= IPv4
+}
+```
+### Wget抓取.c32
 ```wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.gz```
 > 安裝syslinux，是需要裡面的.c32
 ### 結構階層規劃配置
@@ -65,6 +85,8 @@ cp /tmp/syslinux-6.03/bios/com32/samples/localboot.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/mboot/mboot.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/menu/menu.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/menu/vesamenu.c32 /var/lib/tftpboot/bios/
+cp /tmp/syslinux-6.03/bios/com32/elflink/ldlinux/ldlinux.c32 /var/lib/tftpboot/
+cp /tmp/syslinux-6.03/bios/core/pxelinux.0 /var/lib/tftpboot/
 ```
 #### 2.3 .c32功能說明
 - chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
@@ -127,4 +149,5 @@ label ESXi_8.0U2 # 安裝選項
 menu end
 
 ```
-#### 4.1 創建文件
+### SOP5 tftp服務啟動
+```systemctl restart xinetd```
