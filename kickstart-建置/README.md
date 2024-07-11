@@ -46,9 +46,9 @@ next-server 10.31.34.9;     #指定轉跳到PXE Server
 #### /var/lib/tftpboot/pxelinux.cfg/ 放置圖型化引導菜單
 ### SOP1 創建資料夾
 ```
-mkdir /var/lib/tftpboot/bios
-mkdir /var/lib/tftpboot/images
-mkdir /var/lib/tftpboot/pxelinux.cfg
+mkdir -p /var/lib/tftpboot/bios
+mkdir -p /var/lib/tftpboot/images
+mkdir -p /var/lib/tftpboot/pxelinux.cfg
 ```
 ### SOP2 抓取syslinux-6.03.tar.gz
 ```
@@ -72,7 +72,17 @@ cp /tmp/syslinux-6.03/bios/com32/menu/vesamenu.c32 /var/lib/tftpboot/bios/
 - mboot.c32: 用於引導 VMware ESXi，必須有。
 - menu.c32: 提供圖形化的引導菜單，非常有用。
 - vesamenu.c32: 提供更好的圖形化引導菜單，非常有用。
+### SOP3 建置ESXi安裝檔
+#### 官網下載ESXI ISO (VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso)
+#### 將檔案丟到機器內
+```
+scp VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso user@ip:/tmp
+mkdir -p /mnt/iso
+mount -o loop /tmp/VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso /mnt/iso
+mkdir -p /var/lib/tftpboot/images/ESXi_8.0U2
+cp -r /mnt/iso/* /var/lib/tftpboot/images/ESXi_8.0U2
 
+```
 建置結構   
 chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
 linux.c32: 用於引導 Linux kernel，在某些情況下可能需要。
