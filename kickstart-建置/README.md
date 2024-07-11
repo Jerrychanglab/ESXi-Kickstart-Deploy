@@ -7,6 +7,11 @@
 ## DHCP-建置
 ### 安裝套件
 ```yum install dhcp-server```
+### SELIUNX 關閉
+``` 
+sed -i s'/enforcing/disabled/'g /etc/selinux/config
+setenforce 0
+```
 ### 修改DHCP文件
 vim /etc/dhcp/dhcpd.conf
 ```
