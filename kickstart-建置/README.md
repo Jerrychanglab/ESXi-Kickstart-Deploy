@@ -91,7 +91,10 @@ cp /tmp/syslinux-6.03/bios/com32/mboot/mboot.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/menu/menu.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/menu/vesamenu.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/elflink/ldlinux/ldlinux.c32 /var/lib/tftpboot/
+#新增
 cp /tmp/syslinux-6.03/bios/core/pxelinux.0 /var/lib/tftpboot/
+cp /tmp/syslinux-6.03/bios/com32/lib/libcom32.c32 /var/lib/tftpboot/
+cp /tmp/syslinux-6.03/bios/com32/libutil/libutil.c32 /var/lib/tftpboot/
 ```
 #### 2.3 .c32功能說明
 - chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
