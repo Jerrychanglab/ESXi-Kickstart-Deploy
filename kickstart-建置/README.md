@@ -37,27 +37,33 @@ next-server 10.31.34.9;     #指定轉跳到PXE Server
 ## tftpboot結構-建置
 ### 安裝xinetd
 ```yum install xinetd```
-### 安裝syslinux
-```yum install syslinux mtools syslinux-nonlinux```
+### Wget抓取
+```wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.gz```
 > 安裝syslinux，是需要裡面的.c32
 ### 結構階層規劃配置
-#### /var/lib/tftpboot/ 放置.c32檔案
+#### /var/lib/tftpboot/bios/ 放置.c32檔案
 #### /var/lib/tftpboot/images/ 放置ESXi ISO
 #### /var/lib/tftpboot/pxelinux.cfg/ 放置圖型化引導菜單
 ### SOP1 創建資料夾
 ```
 mkdir /var/lib/tftpboot/bios
 mkdir /var/lib/tftpboot/images
-mkdir /var/lib/tftpboot/pxelinux.cfg/
+mkdir /var/lib/tftpboot/pxelinux.cfg
+```
+### SOP2 抓取syslinux-6.03.tar.gz
+```
+cd /tmp
+wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.gz
+tar zxvf syslinux-6.03.tar.gz
 ```
 ### SOP2 複製必要的.C32到指定路徑
 ```
-cp /usr/share/syslinux/chain.c32 /var/lib/tftpboot/bios/
-cp /usr/share/syslinux/linux.c32 /var/lib/tftpboot/bios/
-cp /usr/share/syslinux/localboot.c32 /var/lib/tftpboot/bios/
-cp /usr/share/syslinux/mboot.c32 /var/lib/tftpboot/bios/
-cp /usr/share/syslinux/menu.c32 /var/lib/tftpboot/bios/
-cp /usr/share/syslinux/vesamenu.c32 /var/lib/tftpboot/bios/
+cp /tmp/syslinux-6.03/bios/com32/chain/chain.c32 /var/lib/tftpboot/bios/
+cp /tmp/syslinux-6.03/bios/com32/modules/linux.c32 /var/lib/tftpboot/bios/
+cp /tmp/syslinux-6.03/bios/com32/samples/localboot.c32 /var/lib/tftpboot/bios/
+cp /tmp/syslinux-6.03/bios/com32/mboot/mboot.c32 /var/lib/tftpboot/bios/
+cp /tmp/syslinux-6.03/bios/com32/menu/menu.c32 /var/lib/tftpboot/bios/
+cp /tmp/syslinux-6.03/bios/com32/menu/vesamenu.c32 /var/lib/tftpboot/bios/
 ```
 #### .c32功能說明
 - chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
