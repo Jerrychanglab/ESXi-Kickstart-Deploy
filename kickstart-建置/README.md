@@ -103,11 +103,29 @@ modules=jumpstrt.gz --- useropts.gz --- features.gz --- k.b00 --- uc_intel.b00 -
 build=8.0.2-0.0.22380479
 updated=0
 ```
-#### 4 
-建置結構   
-chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
-linux.c32: 用於引導 Linux kernel，在某些情況下可能需要。
-localboot.c32: 用於本地磁盤引導。
-mboot.c32: 用於引導 VMware ESXi，必須有。
-menu.c32: 提供圖形化的引導菜單，非常有用。
-vesamenu.c32: 提供更好的圖形化引導菜單，非常有用。
+### SOP4 引導菜單-建置
+#### 4.1 創建開機索引選單
+```
+# 創建與開啟文件
+vim /var/lib/tftpboot/pxelinux.cfg/default
+
+# 內容貼上
+
+default vesamenu.c32 # 載入選項畫面
+prompt 0 # 確認
+timeout 600 # 等待時間60s
+menu title ESXI PXE Install # 選單開頭
+
+label local # Local硬碟開機
+      MENU LABEL ^Boot from local drive
+      localboot 0xffff
+
+label ESXi_8.0U2 # 安裝選項
+      KERNEL images/ESXi_8.0U2/mboot.c32
+      APPEND images/ESXi_8.0U2/boot.cfg
+      MENU LABEL ^Install ESXi 8.0U2
+
+menu end
+
+```
+#### 4.1 創建文件
