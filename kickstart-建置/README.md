@@ -4,7 +4,7 @@
 3. dhcpd
 ``` yum install httpd xinetd dhcpd```
 
-## DHCP建置
+## DHCP-建置
 ### 安裝套件
 ```yum install dhcpd```
 ### 修改DHCP文件
@@ -34,13 +34,13 @@ next-server 10.31.34.9;     #指定轉跳到PXE Server
 ### 配發IP紀錄
 ```cat /var/lib/dhcpd/dhcpd.leases```
 
-
-
-建置結構
-/var/lib/tftpboot/images/
-                        - ESXi_8.0U2_SR630
-/var/lib/tftpboot/pxelinux.cfg/
-/var/lib/tftpboot/ #放置圖形化引導菜單
+## tftpboot結構-建置
+### 安裝套件
+```yum install xinetd```
+### 結構階層規劃配置
+#### /var/lib/tftpboot/ 放置.c32檔案
+#### /var/lib/tftpboot/images/ 放置ESXi ISO
+#### /var/lib/tftpboot/pxelinux.cfg/ 放置圖型化引導菜單
 
 
 建置結構   
