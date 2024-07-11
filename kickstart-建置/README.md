@@ -44,7 +44,22 @@ next-server 10.31.34.9;     #指定轉跳到PXE Server
 #### /var/lib/tftpboot/ 放置.c32檔案
 #### /var/lib/tftpboot/images/ 放置ESXi ISO
 #### /var/lib/tftpboot/pxelinux.cfg/ 放置圖型化引導菜單
-### SOP1 準備相對應的.C32
+### SOP1 創建資料夾
+```
+mkdir /var/lib/tftpboot/bios
+mkdir /var/lib/tftpboot/images
+mkdir /var/lib/tftpboot/pxelinux.cfg/
+```
+### SOP2 複製必要的.C32到指定路徑
+```
+cp /usr/share/syslinux/chain.c32 /var/lib/tftpboot/bios/
+cp /usr/share/syslinux/linux.c32 /var/lib/tftpboot/bios/
+cp /usr/share/syslinux/localboot.c32 /var/lib/tftpboot/bios/
+cp /usr/share/syslinux/mboot.c32 /var/lib/tftpboot/bios/
+cp /usr/share/syslinux/menu.c32 /var/lib/tftpboot/bios/
+cp /usr/share/syslinux/vesamenu.c32 /var/lib/tftpboot/bios/
+```
+#### .c32功能說明
 - chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
 - linux.c32: 用於引導 Linux kernel，在某些情況下可能需要。
 - localboot.c32: 用於本地磁盤引導。
