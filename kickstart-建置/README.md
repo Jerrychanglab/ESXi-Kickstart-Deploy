@@ -50,13 +50,14 @@ mkdir -p /var/lib/tftpboot/bios
 mkdir -p /var/lib/tftpboot/images
 mkdir -p /var/lib/tftpboot/pxelinux.cfg
 ```
-### SOP2 抓取syslinux-6.03.tar.gz
+### SOP2 .C32檔案抓取與移動
+#### 2.1 抓取syslinux-6.03.tar.gz
 ```
 cd /tmp
 wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.gz
 tar zxvf syslinux-6.03.tar.gz
 ```
-### SOP2 複製必要的.C32到指定路徑
+#### 2.2 複製必要的.C32到指定路徑
 ```
 cp /tmp/syslinux-6.03/bios/com32/chain/chain.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/modules/linux.c32 /var/lib/tftpboot/bios/
@@ -65,7 +66,7 @@ cp /tmp/syslinux-6.03/bios/com32/mboot/mboot.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/menu/menu.c32 /var/lib/tftpboot/bios/
 cp /tmp/syslinux-6.03/bios/com32/menu/vesamenu.c32 /var/lib/tftpboot/bios/
 ```
-#### .c32功能說明
+#### 2.3 .c32功能說明
 - chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
 - linux.c32: 用於引導 Linux kernel，在某些情況下可能需要。
 - localboot.c32: 用於本地磁盤引導。
@@ -73,8 +74,8 @@ cp /tmp/syslinux-6.03/bios/com32/menu/vesamenu.c32 /var/lib/tftpboot/bios/
 - menu.c32: 提供圖形化的引導菜單，非常有用。
 - vesamenu.c32: 提供更好的圖形化引導菜單，非常有用。
 ### SOP3 建置ESXi安裝檔
-#### 1.官網下載ESXI ISO (VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso)
-#### 2.將ISO檔案丟到虛擬機器內
+#### 3.1 官網下載ESXI ISO (VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso)
+#### 3.2 將ISO檔案丟到虛擬機器內
 ```
 scp VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso user@ip:/tmp
 mkdir -p /mnt/iso
@@ -82,11 +83,11 @@ mount -o loop /tmp/VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso /mnt/iso
 mkdir -p /var/lib/tftpboot/images/ESXi_8.0U2
 cp -r /mnt/iso/* /var/lib/tftpboot/images/ESXi_8.0U2
 ```
-#### 3.1 設定boot.cfg (移除特殊符號)
+#### 3.3 設定boot.cfg (移除特殊符號)
 ```
 sed -i s'/\///'g /var/lib/tftpboot/images/ESXi_8.0U2/boot.cfg
 ```
-#### 3.2 開啟boot.cfg (文件修改內容)
+#### 3.4 開啟boot.cfg (文件修改內容)
 ```
 # 開啟文件
 vim /var/lib/tftpboot/images/ESXi_8.0U2/boot.cfg
@@ -102,6 +103,7 @@ modules=jumpstrt.gz --- useropts.gz --- features.gz --- k.b00 --- uc_intel.b00 -
 build=8.0.2-0.0.22380479
 updated=0
 ```
+#### 4 
 建置結構   
 chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
 linux.c32: 用於引導 Linux kernel，在某些情況下可能需要。
