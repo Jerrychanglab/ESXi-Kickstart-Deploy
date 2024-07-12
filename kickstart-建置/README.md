@@ -1,6 +1,13 @@
 # 描述:
 ![image](https://github.com/user-attachments/assets/eb563573-71c2-4915-8cbb-efa773996486)
 
+## 備註: Kickstart建置在同一台虛擬機完成(DHCP+TFTP+HTTPD)
+> 網段: 10.31.34.0/24
+
+> IP: 10.31.34.9
+
+> 網卡name: ifcfg-eth1
+
 ## DHCP-建置
 ### SOP1 安裝套件
 ```yum install dhcp-server```
@@ -246,3 +253,7 @@ reboot
 %end
 
 ```
+### SOP4 httpd 服務啟動
+```systemctl restart httpd```
+## Kickstart驗證
+
