@@ -2,14 +2,14 @@
 ![image](https://github.com/user-attachments/assets/eb563573-71c2-4915-8cbb-efa773996486)
 
 ## DHCP-建置
-### 安裝套件
+### SOP1 安裝套件
 ```yum install dhcp-server```
-### SELIUNX 關閉
+### SOP2 SELIUNX 關閉
 ``` 
 sed -i s'/enforcing/disabled/'g /etc/selinux/config
 setenforce 0
 ```
-### 修改DHCP文件
+### SOP3 修改DHCP文件
 vim /etc/dhcp/dhcpd.conf
 ```
 subnet 10.31.34.0 netmask 255.255.255.0 {      #你的機器必須要有此腳
@@ -31,14 +31,14 @@ filename "pxelinux.0";
 next-server 10.31.34.9;     #指定轉跳到PXE Server
 }
 ```
-### 指定DHCP配發網卡
+### SOP4 指定DHCP配發網卡
 vim /etc/sysconfig/dhcpd
 ```
 DHCPDARGS=ifcfg-eth1 #新增，需看你要發放IP的網卡名稱
 ```
-### 重啟服務
+### SOP5 重啟服務
 ```systemctl restart dhcpd```
-### 配發IP紀錄
+### SOP5.1 配發IP紀錄
 ```cat /var/lib/dhcpd/dhcpd.leases```
 
 ## tftpboot結構-建置
@@ -68,7 +68,7 @@ service tftp
 ```wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.gz```
 > 安裝syslinux，是需要裡面的.c32
 ### 結構階層規劃配置
-#### /var/lib/tftpboot/bios/ 放置.c32檔案
+#### /var/lib/tftpboot/ 放置.c32檔案
 #### /var/lib/tftpboot/images/ 放置ESXi ISO
 #### /var/lib/tftpboot/pxelinux.cfg/ 放置圖型化引導菜單
 ### SOP1 創建資料夾
@@ -92,13 +92,12 @@ cp /tmp/syslinux-4.05/com32/menu/menu.c32
 cp /tmp/syslinux-4.05/core/pxelinux.0
 cp /tmp/syslinux-4.05/com32/menu/vesamenu.c32
 ```
-#### 2.3 .c32功能說明
-- chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
-- linux.c32: 用於引導 Linux kernel，在某些情況下可能需要。
+#### 2.3 元件功能說明
 - localboot.c32: 用於本地磁盤引導。
 - mboot.c32: 用於引導 VMware ESXi，必須有。
 - menu.c32: 提供圖形化的引導菜單，非常有用。
 - vesamenu.c32: 提供更好的圖形化引導菜單，非常有用。
+- pxelinux.0: PXE 引導程序，必須存在。
 ### SOP3 建置ESXi安裝檔
 #### 3.1 官網下載ESXI ISO (VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso)
 #### 3.2 將ISO檔案丟到虛擬機器內
