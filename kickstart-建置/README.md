@@ -84,22 +84,16 @@ mkdir -p /var/lib/tftpboot/pxelinux.cfg
 #### 2.1 抓取syslinux-6.03.tar.gz
 ```
 cd /tmp
-wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.gz
-tar zxvf syslinux-6.03.tar.gz
+wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-4.05.tar.gz
+tar zxvf syslinux-4.05.tar.gz
 ```
 #### 2.2 複製必要的.C32到指定路徑
 ```
-cp /tmp/syslinux-6.03/bios/com32/chain/chain.c32 /var/lib/tftpboot/bios/
-cp /tmp/syslinux-6.03/bios/com32/modules/linux.c32 /var/lib/tftpboot/bios/
-cp /tmp/syslinux-6.03/bios/com32/samples/localboot.c32 /var/lib/tftpboot/bios/
-cp /tmp/syslinux-6.03/bios/com32/mboot/mboot.c32 /var/lib/tftpboot/bios/
-cp /tmp/syslinux-6.03/bios/com32/menu/menu.c32 /var/lib/tftpboot/bios/
-cp /tmp/syslinux-6.03/bios/com32/menu/vesamenu.c32 /var/lib/tftpboot/bios/
-cp /tmp/syslinux-6.03/bios/com32/elflink/ldlinux/ldlinux.c32 /var/lib/tftpboot/
-#新增
-cp /tmp/syslinux-6.03/bios/core/pxelinux.0 /var/lib/tftpboot/
-cp /tmp/syslinux-6.03/bios/com32/lib/libcom32.c32 /var/lib/tftpboot/
-cp /tmp/syslinux-6.03/bios/com32/libutil/libutil.c32 /var/lib/tftpboot/
+cp /tmp/syslinux-4.05/com32/samples/localboot.c32
+cp /tmp/syslinux-4.05/com32/mboot/mboot.c32
+cp /tmp/syslinux-4.05/com32/menu/menu.c32
+cp /tmp/syslinux-4.05/core/pxelinux.0
+cp /tmp/syslinux-4.05/com32/menu/vesamenu.c32
 ```
 #### 2.3 .c32功能說明
 - chain.c32: 用於從其他引導裝載程序鏈接到 SYSLINUX，非常重要。
@@ -164,3 +158,14 @@ menu end
 ```
 ### SOP5 tftp服務啟動
 ```systemctl restart xinetd```
+
+## 建置httpd文件服務
+### SOP1 安裝 httpd
+```yum install httpd```
+### SOP2 創建資料夾
+``` mkdir -p /var/www/html/ks```
+### SOP3 建置.cfg文件
+vim ESXi_8.0U2.cfg
+```
+
+```
