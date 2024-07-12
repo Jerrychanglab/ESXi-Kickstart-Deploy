@@ -9,14 +9,14 @@
 > 網卡name: ifcfg-eth1
 ***
 # 【 DHCP-建置 】
-### SOP1 安裝套件
+### SOP 1. 安裝套件
 ```yum install dhcp-server```
-### SOP2 SELIUNX 關閉
+### SOP 2. SELIUNX 關閉
 ``` 
 sed -i s'/enforcing/disabled/'g /etc/selinux/config
 setenforce 0
 ```
-### SOP3 修改DHCP文件
+### SOP 3. 修改DHCP文件
 vim /etc/dhcp/dhcpd.conf
 ```
 subnet 10.31.34.0 netmask 255.255.255.0 {      #你的機器必須要有此腳
@@ -38,20 +38,20 @@ filename "pxelinux.0";
 next-server 10.31.34.9;     #指定轉跳到PXE Server
 }
 ```
-### SOP4 指定DHCP配發網卡
+### SOP 4. 指定DHCP配發網卡
 vim /etc/sysconfig/dhcpd
 ```
 DHCPDARGS=ifcfg-eth1 #新增，需看你要發放IP的網卡名稱
 ```
-### SOP5 重啟服務
+### SOP 5. 重啟服務
 ```systemctl restart dhcpd```
-### SOP5.1 配發IP紀錄
+### SOP 5.1. 配發IP紀錄
 ```cat /var/lib/dhcpd/dhcpd.leases```
 ***
 # 【 tftpboot-建置 】
-### SOP1 安裝xinetd與tftp-server
+### SOP 1. 安裝xinetd與tftp-server
 ```yum install xinetd tftp-server```
-### SOP2 配置tftp (創建+貼上內容)
+### SOP 2. 配置tftp (創建+貼上內容)
 vim /etc/xinetd.d/tftp
 ```
 service tftp
@@ -69,24 +69,24 @@ service tftp
 }
 ```
 > 安裝syslinux，是需要裡面的.c32
-### 結構階層規劃配置
+### 結構階層規劃配置 (說明)
 #### - /var/lib/tftpboot/ 放置.c32檔案
 #### - /var/lib/tftpboot/images/ 放置ESXi ISO
 #### - /var/lib/tftpboot/pxelinux.cfg/ 放置圖型化引導菜單
-### SOP3 創建資料夾
+### SOP 3. 創建資料夾
 ```
 mkdir -p /var/lib/tftpboot/bios
 mkdir -p /var/lib/tftpboot/images
 mkdir -p /var/lib/tftpboot/pxelinux.cfg
 ```
-### SOP3 .C32檔案抓取與移動
-#### 3.1 抓取syslinux-6.03.tar.gz
+### SOP 4. .C32檔案抓取與移動
+#### 4.1. 抓取syslinux-6.03.tar.gz
 ```
 cd /tmp
 wget https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-4.05.tar.gz
 tar zxvf syslinux-4.05.tar.gz
 ```
-#### 3.2 複製必要的.C32到指定路徑
+#### 4.2. 複製必要的.C32到指定路徑
 ```
 cp /tmp/syslinux-4.05/com32/samples/localboot.c32
 cp /tmp/syslinux-4.05/com32/mboot/mboot.c32
@@ -94,15 +94,15 @@ cp /tmp/syslinux-4.05/com32/menu/menu.c32
 cp /tmp/syslinux-4.05/core/pxelinux.0
 cp /tmp/syslinux-4.05/com32/menu/vesamenu.c32
 ```
-#### 3.3 元件功能說明
+#### 4.3. 元件功能說明
 - localboot.c32: 用於本地磁盤引導。
 - mboot.c32: 用於引導 VMware ESXi，必須有。
 - menu.c32: 提供圖形化的引導菜單，非常有用。
 - vesamenu.c32: 提供更好的圖形化引導菜單，非常有用。
 - pxelinux.0: PXE 引導程序，必須存在。
-### SOP4 建置ESXi安裝檔
-#### 4.1 官網下載ESXI ISO (VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso)
-#### 4.2 將ISO檔案丟到虛擬機器內
+### SOP 5. 建置ESXi安裝檔
+#### 5.1. 官網下載ESXI ISO (VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso)
+#### 5.2 將ISO檔案丟到虛擬機器內
 ```
 scp VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso user@ip:/tmp
 mkdir -p /mnt/iso
@@ -110,11 +110,11 @@ mount -o loop /tmp/VMware-VMvisor-Installer-8.0U2-22380479.x86_64.iso /mnt/iso
 mkdir -p /var/lib/tftpboot/images/ESXi_8.0U2
 cp -r /mnt/iso/* /var/lib/tftpboot/images/ESXi_8.0U2
 ```
-#### 4.3 設定boot.cfg (移除特殊符號)
+#### 5.3. 設定boot.cfg (移除特殊符號)
 ```
 sed -i s'/\///'g /var/lib/tftpboot/images/ESXi_8.0U2/boot.cfg
 ```
-#### 4.4 開啟boot.cfg (調整文件內容)
+#### 5.4. 開啟boot.cfg (調整文件內容)
 vim /var/lib/tftpboot/images/ESXi_8.0U2/boot.cfg
 ```
 bootstate=0 
