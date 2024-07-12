@@ -1,4 +1,4 @@
-![image](https://github.com/Jerrychanglab/ESXi-Kickstart-Deploy/assets/39659664/d31f729f-9ec0-4106-abc8-2cd30c62118d)安裝套件
+# 安裝套件
 1. httpd
 2. xinetd
 3. dhcpd
@@ -33,6 +33,11 @@ ping-check true;
 filename "pxelinux.0";
 next-server 10.31.34.9;     #指定轉跳到PXE Server
 }
+```
+### 指定DHCP配發網卡
+vim /etc/sysconfig/dhcpd
+```
+DHCPDARGS=ifcfg-eth1 #新增，需看你要發放IP的網卡名稱
 ```
 ### 重啟服務
 ```systemctl restart dhcpd```
