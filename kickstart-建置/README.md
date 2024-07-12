@@ -1,8 +1,5 @@
-# 安裝套件
-1. httpd
-2. xinetd
-3. dhcpd
-``` yum install httpd xinetd dhcpd```
+# 描述:
+![image](https://github.com/user-attachments/assets/eb563573-71c2-4915-8cbb-efa773996486)
 
 ## DHCP-建置
 ### 安裝套件
