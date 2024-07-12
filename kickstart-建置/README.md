@@ -249,4 +249,7 @@ reboot
 ```systemctl restart httpd```
 ***
 # 【 Kickstart驗證 】
+### SOP 1. 創建一台虛擬機，模擬ESXi安裝，如能看到PXE跳轉到此頁面，並寫能順利載入即代表完成
+![image](https://github.com/user-attachments/assets/502e334e-8052-46bd-967f-110fadb1d354)
+
 
