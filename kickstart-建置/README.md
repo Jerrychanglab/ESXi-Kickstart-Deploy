@@ -167,5 +167,86 @@ menu end
 ### SOP3 建置.cfg文件
 vim ESXi_8.0U2.cfg
 ```
+### == SOP 1 ==
+## Accept the VMware End User License Agreement
+accepteula
+
+## The install Local disk
+clearpart --alldrives --overwritevmfs
+install --firstdisk=local --overwritevmfs --novmfsondisk
+
+## Set the dhcp 
+network --bootproto=dhcp --device=vmnic0
+
+## Set root password
+rootpw VMware1!
+
+### == SOP 2 ==
+##Enable shell command busybox
+%firstboot --interpreter=busybox
+
+## Enable SSH
+vim-cmd hostsvc/enable_ssh
+vim-cmd hostsvc/start_ssh
+
+## Enable ESXi Shell
+vim-cmd hostsvc/enable_esx_shell
+vim-cmd hostsvc/start_esx_shell
+
+## License Key
+vim-cmd vimsvc/license --set XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+
+## IP Configure
+CURRENT_IP=$(esxcli network ip interface ipv4 get | grep vmk0 | awk '{print $2}')
+CURRENT_MASK=$(esxcli network ip interface ipv4 get | grep vmk0 | awk '{print $3}')
+CURRENT_GATEWAY=$(esxcli network ip interface ipv4 get | grep vmk0 | awk '{print $6}')
+esxcli network ip interface ipv4 set -i vmk0 -I $CURRENT_IP -N $CURRENT_MASK -t static
+esxcli network ip route ipv4 add -n default -g $CURRENT_GATEWAY
+
+## HostName
+CURRENT_HOSTNAME=$(esxcli network ip interface ipv4 get | grep vmk0 | awk '{print $2}' | sed s'/\./-/'g)
+esxcli system hostname set --host=ESXi-$CURRENT_HOSTNAME
+
+#SNMP
+esxcli system snmp set -c 'cyanyellowgreen168'
+esxcli system snmp set -e true
+
+#Coredump
+#esxcli system coredump network set --interface-name 'vmk0' --server-ipv4 'IP' --server-port '6500'
+#esxcli system coredump network set --enable true
+
+#syslog
+#esxcli system syslog config set --loghost='udp://IP:514'
+#esxcli system syslog reload
+
+## NTP two Server 
+esxcli system ntp set --server=<IP> --server=<IP>
+esxcli system ntp set --enabled=yes
+
+## Power Type
+esxcli system settings advanced set --option=/Power/CpuPolicy --string-value='High Performance'
+
+# IPMITOOLS VIB 
+esxcli software vib install -v http://10.31.2.9/vib/ipmitool.vib -f
+
+# Mellanox VIB
+esxcli software vib update -v http://10.31.2.9/vib/network/MEL_bootbank_nmlx5-core_4.21.71.101-1OEM.702.0.0.17630552.vib
+
+# NetApp VAAI VIB
+esxcli software vib install -v http://10.31.2.9/vib/netapp/NetApp_bootbank_NetAppNasPlugin_2.0.1-16.vib
+
+## vSwitch0 配置
+esxcli network vswitch standard uplink add -v 'vSwitch0' -u 'vmnic0'
+esxcli network vswitch standard uplink add -v 'vSwitch0' -u 'vmnic1'
+esxcli network vswitch standard portgroup policy failover set -a vmnic0,vmnic1 -p 'Management Network'
+esxcli network vswitch standard portgroup policy failover set -p 'Management Network' -l 'iphash'
+esxcli network vswitch standard policy failover set -v 'vSwitch0' -l 'iphash' -a 'vmnic0,vmnic1'
+esxcli network vswitch standard portgroup add -v 'vSwitch0' -p 'vLan3102_10.31.2'
+esxcli network vswitch standard portgroup set -p 'vLan3102_10.31.2' -v '3102'
+
+## Reboot to complete host configuration
+reboot
+
+%end
 
 ```
