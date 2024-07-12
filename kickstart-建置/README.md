@@ -7,8 +7,8 @@
 > IP: 10.31.34.9
 
 > 網卡name: ifcfg-eth1
-
-## DHCP-建置
+***
+# 【 DHCP-建置 】
 ### SOP1 安裝套件
 ```yum install dhcp-server```
 ### SOP2 SELIUNX 關閉
@@ -47,8 +47,8 @@ DHCPDARGS=ifcfg-eth1 #新增，需看你要發放IP的網卡名稱
 ```systemctl restart dhcpd```
 ### SOP5.1 配發IP紀錄
 ```cat /var/lib/dhcpd/dhcpd.leases```
-
-## tftpboot-建置
+***
+# 【 tftpboot-建置 】
 ### SOP1 安裝xinetd與tftp-server
 ```yum install xinetd tftp-server```
 ### SOP2 配置tftp (創建+貼上內容)
@@ -153,8 +153,8 @@ menu end
 ```
 ### SOP6 tftp服務啟動
 ```systemctl restart xinetd```
-
-## 建置HTTPD服務
+***
+# 【 建置HTTPD服務 】
 ### SOP1 安裝 httpd
 ```yum install httpd```
 ### SOP2 創建資料夾
@@ -247,5 +247,6 @@ reboot
 ```
 ### SOP4 httpd 服務啟動
 ```systemctl restart httpd```
-## Kickstart驗證
+***
+# 【 Kickstart驗證 】
 
